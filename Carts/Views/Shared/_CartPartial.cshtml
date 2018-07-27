@@ -1,0 +1,37 @@
+﻿
+@{
+	var currentCart = Carts.Models.Cart.Operation.GetCurrentCart();
+}
+<a id="CartDropDown" class="dropdown-toggle" data-toggle="dropdown">
+	@String.Format(@Carts.Resource.Resource.Total + "${0} ({1})", currentCart.TotalAmount, currentCart.Count)
+	<span class="caret"></span>
+</a>
+<ul class="dropdown-menu" role="menu" aria-labelledby="CartDropDown">
+	@if (currentCart.Count > 0)
+	{
+		foreach (var cartitem in currentCart)
+		{
+			<li class="col-xs-12">
+				<span class="col-xs-9">@cartitem.Name @cartitem.Price.ToString("0") X @cartitem.Quantity </span>
+				<span class="btn btn-danger col-xs-2" onclick="RemoveFromCart('@cartitem.Id')">
+					X
+				</span>
+			</li>
+		}
+		<li class="divider"></li>
+		<li>
+			<div id="CartButtons" class="col-xs-12">
+				<a class="btn btn-success text-center col-xs-5" href="@Url.Action("Index","Order",new { })">
+					@Carts.Resource.Resource.Checkout
+				</a>
+				<a class="btn btn-danger text-center  col-xs-5 col-xs-offset-2" onclick="ClearCart()">
+					@Carts.Resource.Resource.Clean
+				</a>
+			</div>
+		</li>
+	}
+	else
+	{
+		<li><a class="btn btn-default text-center" href="#">@Carts.Resource.Resource.No_item</a></li>
+	}
+</ul>

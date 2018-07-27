@@ -1,0 +1,111 @@
+﻿@{
+	ViewBag.Title = "Edit";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+	var DEFAULT_URL = "http://localhost:52460/";
+
+	function editProduct(productId) {
+		var json = JSON.stringify({
+			Name: $("#name").val(), Manufacturer: $("#manufacturer").val(),
+			Brand: $("#brand").val(), Description: $("#description").val(),
+			Price: $("#price").val(), ImageUri: $("#imageUri").val()
+		});
+
+		$.ajax({
+			url: DEFAULT_URL + "api/ProductInfos/edit/" + productId,
+			cache: false,
+			type: 'PUT',
+			contentType: 'application/json; charset=utf-8',
+			data: json,
+			success: function () { window.location.href = DEFAULT_URL + "Product/Index"; }
+		});
+	}
+
+	function test() {
+		$("#imageUri").val("test");
+	}
+
+	function FillProductInfo(productId) {
+		$.ajax({
+			url: DEFAULT_URL + "api/ProductInfos/" + productId,
+			cache: false,
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+				$("#name").val(data.Name);
+				$("#manufacturer").val(data.Manufacturer);
+				$("#brand").val(data.Brand);
+				$("#description").val(data.Description);
+				$("#price").val(data.Price);
+				$("#imageUri").val(data.ImageUri);
+			}
+		});
+	}
+</script>
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+	<div class="form-horizontal">
+		<h4>Product</h4>
+		<hr />
+		<div class="form-group">
+			@Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<input type="text" title="Name" id="name" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.Label("Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<input type="text" title="Manufacturer" id="manufacturer" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.Label("Brand", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<input type="text" title="Brand" id="brand" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<input type="text" title="Description" id="description" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.Label("Price", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<input type="text" title="Price" id="price" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.Label("Image Uri", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<input type="text" title="ImageUri" id="imageUri" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<a onclick='editProduct(@ViewBag.LinkableId)' href='javascript:void(0);' class='btn btn-primary' role='button'> Save </a>
+			</div>
+		</div>
+	</div>
+	<script>
+		FillProductInfo(@ViewBag.LinkableId);
+	</script>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>

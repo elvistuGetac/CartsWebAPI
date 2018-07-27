@@ -1,0 +1,88 @@
+﻿@{
+	ViewBag.Title = "Create";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function addProduct() {
+
+		var DEFAULT_URL = "http://localhost:52460/";
+
+		var json = JSON.stringify({
+			Name: $("#name").val(), Manufacturer: $("#manufacturer").val(),
+			Brand: $("#brand").val(), Description: $("#description").val(),
+			Price: $("#price").val(), ImageUri: $("#imageUri").val()
+		});
+
+		$.ajax({
+			url: DEFAULT_URL + "api/ProductInfos/add",
+			cache: false,
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			data: json,
+			success: function () { window.location.href = DEFAULT_URL + "Product/Index"; }
+		});
+	}
+</script>
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+<div class="form-horizontal">
+	<h4>Product</h4>
+	<hr />
+	<div class="form-group">
+		@Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="Name" id="name" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.Label("Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="Manufacturer" id="manufacturer" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.Label("Brand", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="Brand" id="brand" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="Description" id="description" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.Label("Price", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="Price" id="price" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.Label("Image Url", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="ImageUri" id="imageUri" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-md-offset-2 col-md-10">
+			<a onclick='addProduct()' href='javascript:void(0);' class='btn btn-primary' role='button'> Create </a>
+		</div>
+	</div>
+</div>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>

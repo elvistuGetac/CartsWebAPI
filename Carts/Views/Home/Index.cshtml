@@ -1,0 +1,35 @@
+﻿@{
+	ViewBag.Title = "Home Page";
+}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+	var DEFAULT_URL = "http://localhost:52460/";
+
+	function DisplayProductInfos() {
+		$.getJSON(DEFAULT_URL + "api/ProductInfos")
+			.done(function (data) {
+				$.each(data, function (key, item) {
+					$("#products").append("<tr>" +
+						"<td><img src=" + item.ImageUri + " width='50' height='50' /></td>" +
+						"<td>" + item.Name + "</td>" +
+						"<td>" + item.Brand + "</td>" +
+						"<td>" + item.Description + "</td>" +
+						"<td>" + item.Price + "</td>" +
+						"<td><a onclick ='AddToCart(" +　item.Id　+ ")' href='javascript:void(0);' class='btn btn-primary' role='button'> @Carts.Resource.Resource.Add </a></td>" +
+						"</tr>");
+				});
+			});
+	}
+</script>
+
+<h2>@Carts.Resource.Resource.Product_list</h2>
+<table class="table">
+	<thead><tr><td>@Carts.Resource.Resource.Image</td><td>@Carts.Resource.Resource.Name</td><td>@Carts.Resource.Resource.Brand</td><td>@Carts.Resource.Resource.Description</td><td>@Carts.Resource.Resource.Price</td></tr></thead>
+	<tbody id="products">
+		<script>
+			DisplayProductInfos();
+		</script>
+	</tbody>
+</table>

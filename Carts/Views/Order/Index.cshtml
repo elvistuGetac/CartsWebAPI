@@ -1,0 +1,85 @@
+﻿@{
+	ViewBag.Title = "Pay page";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+	var cart = Carts.Models.Cart.Operation.GetCurrentCart();
+}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function addOrder(userId, totalAmount) {
+
+		var DEFAULT_URL = "http://localhost:52460/";
+
+		var json = JSON.stringify({
+			UserId: userId,
+			ShippingAddress_Id: $("#address").val(),
+			TotalAmount: totalAmount
+		});
+
+		$.ajax({
+			url: DEFAULT_URL + "api/Order/add",
+			cache: false,
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			data: json,
+			success: function () { window.alert("Success!"); }
+		});
+	}
+</script>
+
+<h2>Check out</h2>
+
+<table class="table">
+	<thead><tr><td>Image</td><td>Name</td><td>Price</td><td>Quantity</td><td>Total</td></tr></thead>
+	<tbody>
+		@foreach (var pd in cart)
+		{
+			<tr>
+				<td><img src="@pd.DefaultImageURL" width="50" height="50" /></td>
+				<td>@pd.Name</td>
+				<td>@pd.Price</td>
+				<td>@pd.Quantity</td>
+				<td>@pd.Amount</td>
+			</tr>
+		}
+		<tr><td colspan="3"></td><td>Total</td><td>@cart.TotalAmount</td></tr>
+	</tbody>
+</table>
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+	<h4>Reciever Info</h4>
+	<hr />
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	<div class="form-group">
+		@Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="Name" id="name" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.Label("Phone", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="Phone" id="phone" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.Label("Address", htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			<input type="text" title="Address" id="address" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-md-offset-2 col-md-10">
+			<a onclick='addOrder(@ViewBag.LinkableId, @cart.TotalAmount)' href='javascript:void(0);' class='btn btn-primary' role='button'> Create </a>
+		</div>
+	</div>
+</div>
+}
